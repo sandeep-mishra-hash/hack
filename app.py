@@ -109,6 +109,26 @@ def mark_message_as_read(message_id):
     return False
 
 # ----------------- ROUTES -----------------
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    user = get_user(username)
+    if user and user.password == password:
+        session['user_id'] = user.id
+        session['role'] = user.role
+        # Redirect to dashboard based on role
+        if user.role == 'admin':
+            return redirect(url_for('admin_dashboard'))
+        elif user.role == 'teacher':
+            return redirect(url_for('teacher_dashboard'))
+        elif user.role == 'student':
+            return redirect(url_for('student_dashboard'))
+        else:
+            return redirect(url_for('home'))
+    else:
+        flash('Invalid username or password')
+        return redirect(url_for('signin'))
 @app.route('/')
 def home():
     user = None
