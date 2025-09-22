@@ -111,13 +111,6 @@ def mark_message_as_read(message_id):
 # ----------------- ROUTES -----------------
 @app.route('/')
 def home():
-@app.route('/signin.html')
-def signin():
-    return app.send_static_file('signin.html')
-
-@app.route('/signup.html')
-def signup():
-    return app.send_static_file('signup.html')
     user = None
     user_notifications = []
     if 'user_id' in session:
@@ -152,6 +145,14 @@ def signup():
                            notifications=user_notifications,
                            backlog_classes=backlog_classes,
                            rooms=rooms)
+
+@app.route('/signin.html')
+def signin():
+    return app.send_static_file('signin.html')
+
+@app.route('/signup.html')
+def signup():
+    return app.send_static_file('signup.html')
 
 # ----------------- Dashboards -----------------
 @app.route('/student_dashboard')
