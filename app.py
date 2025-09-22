@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
 
-app = Flask(__name__, template_folder='.')  # Look for templates in current directory
+app = Flask(__name__, template_folder='templates')  # Use 'templates' folder for Jinja2 templates
 app.secret_key = "supersecretkey"
 
 # Database configuration
