@@ -8,6 +8,58 @@
     <!-- ...existing code... -->
 </head>
 <body>
-    <!-- ...existing code from 'admin panel.html'... -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white bg-opacity-20 p-2 rounded-lg">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+                        <p class="text-blue-100">Smart Classroom Management</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
+                        <span>🏠</span>
+                        <span>Home</span>
+                    </a>
+                    <a href="/logout" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-all flex items-center space-x-2">
+                        <span>🚪</span>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Manage Teachers</h2>
+                <a href="/manageteachers" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Go</a>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Class Reports</h2>
+                <a href="/classreport" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">View</a>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Maintenance</h2>
+                <a href="/maintainance" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">Check</a>
+            </div>
+        </div>
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Analytics</h2>
+                <a href="/analytics" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Open</a>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Messages</h2>
+                <a href="/messageteachers" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg">Send</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
