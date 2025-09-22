@@ -621,30 +621,7 @@
             setupEventListeners();
         });
 
-        async function checkAuthentication() {
-            try {
-                const response = await fetch('/api/auth/status', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    currentUser = data.user;
-                    initializeDashboard();
-                    loadDashboardData();
-                } else {
-                    // Not authenticated, redirect to login
-                    window.location.href = '/';
-                }
-            } catch (error) {
-                console.error('Auth check failed:', error);
-                window.location.href = '/';
-            }
-        }
+        // Removed client-side authentication check to prevent redirect after login
 
         function initializeDashboard() {
             if (!currentUser) return;
