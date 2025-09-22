@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - Smart Classroom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: all 0.3s ease; }
+        .btn-primary:hover { background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%); transform: translateY(-1px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
+        .fade-in { animation: fadeIn 0.6s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal { backdrop-filter: blur(10px); }
+        .progress-bar { transition: width 0.5s ease; }
+        .notification { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .tab-active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .student-avatar { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .assignment-urgent { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+        .assignment-pending { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .assignment-completed { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Header -->
+    <nav class="bg-white shadow-lg border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Brand -->
+                <div class="flex items-center">
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-2 rounded-lg">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h1 class="text-xl font-bold text-gray-900">Smart Classroom</h1>
+                        <p class="text-sm text-gray-600">Teacher Portal</p>
+                    </div>
+                </div>
+                <!-- ...rest of teacher dashboard HTML... -->
+            </div>
+        </div>
+    </nav>
+</body>
+</html>
