@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard - Smart Classroom</title>
+    <title>Smart Classroom - Student Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
         
-        .gradient-bg {
+        .student-gradient {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
         }
         
-        .signin-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
         
         .btn-primary {
@@ -31,59 +33,6 @@
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
         
-        .input-field {
-            transition: all 0.3s ease;
-        }
-        
-        .input-field:focus {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
-        }
-        
-        .floating-shapes {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-        }
-        
-        .shape {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .shape:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-        
-        .shape:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            top: 60%;
-            right: 10%;
-            animation-delay: 2s;
-        }
-        
-        .shape:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            bottom: 20%;
-            left: 20%;
-            animation-delay: 4s;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-        
         .fade-in {
             animation: fadeIn 0.8s ease-out;
         }
@@ -93,79 +42,132 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .role-card {
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.6s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+        
+        .assignment-item {
             transition: all 0.3s ease;
-            cursor: pointer;
         }
         
-        .role-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+        .assignment-item:hover {
+            background-color: #f8faff;
+            border-left: 4px solid #667eea;
         }
         
-        .role-card.selected {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        .grade-circle {
+            transition: all 0.5s ease;
         }
         
-        .success-message {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            animation: slideDown 0.5s ease-out;
+        .notification {
+            animation: slideInNotification 0.3s ease-out;
         }
         
-        .error-message {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            animation: shake 0.5s ease-out;
+        @keyframes slideInNotification {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
         
-        @keyframes slideDown {
-            from { transform: translateY(-100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            transition: all 0.3s ease;
         }
         
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+        .upload-area.dragover {
+            border-color: #667eea;
+            background-color: #f0f4ff;
         }
         
-        .loading-spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 3px solid white;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
+        .file-item {
+            animation: slideInFile 0.3s ease-out;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes slideInFile {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
-        .feature-icon {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+        .modal {
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .tab-content {
+            animation: tabFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .priority-high { border-left: 4px solid #ef4444; }
+        .priority-medium { border-left: 4px solid #f59e0b; }
+        .priority-low { border-left: 4px solid #10b981; }
+        
+        .status-submitted { background-color: #dcfce7; color: #166534; }
+        .status-pending { background-color: #fef3c7; color: #92400e; }
+        .status-overdue { background-color: #fee2e2; color: #991b1b; }
+        .status-draft { background-color: #f3f4f6; color: #374151; }
+        
+        .floating-action {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+        }
+        
+        .course-card {
+            background: linear-gradient(135deg, #f8faff 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .quick-action-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
-<body class="gradient-bg">
-    <!-- Floating Background Shapes -->
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
-
+<body class="bg-gray-50">
     <!-- Navigation Header -->
-    <nav class="bg-white shadow-lg border-b border-gray-200">
+    <nav class="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
+                <!-- Logo and Brand -->
                 <div class="flex items-center">
-                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-2 rounded-lg">
+                    <div class="bg-gradient-to-r from-purple-500 to-indigo-600 p-2 rounded-lg">
                         <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/>
+                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
                         </svg>
                     </div>
                     <div class="ml-3">
@@ -173,33 +175,784 @@
                         <p class="text-sm text-gray-600">Student Portal</p>
                     </div>
                 </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="nav-link text-gray-700 hover:text-indigo-600 font-medium transition-colors" data-tab="dashboard">Dashboard</a>
+                    <a href="#" class="nav-link text-gray-500 hover:text-indigo-600 transition-colors" data-tab="assignments">Assignments</a>
+                    <a href="#" class="nav-link text-gray-500 hover:text-indigo-600 transition-colors" data-tab="courses">Courses</a>
+                    <a href="#" class="nav-link text-gray-500 hover:text-indigo-600 transition-colors" data-tab="grades">Grades</a>
+                    <a href="#" class="nav-link text-gray-500 hover:text-indigo-600 transition-colors" data-tab="calendar">Calendar</a>
+                </div>
+
+                <!-- User Profile -->
                 <div class="flex items-center space-x-4">
-                    <a href="/" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Home</a>
-                    <a href="/logout" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                    <!-- Notifications -->
+                    <div class="relative">
+                        <button class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg relative">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                            </svg>
+                            <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+
+                    <!-- User Avatar -->
+                    <div class="flex items-center space-x-3">
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">Alex Johnson</p>
+                            <p class="text-xs text-gray-600">Computer Science</p>
+                        </div>
+                        <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center">
+                            <span class="text-white font-semibold text-sm">AJ</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="flex justify-end mb-8">
-            <a href="/assignment.html" class="btn-primary text-white px-6 py-3 rounded-lg font-medium shadow-lg hover:scale-105 transition-transform">Submit Assignment</a>
-        </div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-8">Your Classes</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Math</h3>
-                <p class="text-gray-600">Monday 08:00 - Room 101</p>
+        <!-- Dashboard Tab -->
+        <div id="dashboardTab" class="tab-content">
+            <!-- Welcome Section -->
+            <div class="student-gradient text-white rounded-2xl p-8 mb-8 relative overflow-hidden fade-in">
+                <div class="relative z-10">
+                    <h1 class="text-3xl md:text-4xl font-bold mb-4">Welcome back, Alex! 👋</h1>
+                    <p class="text-lg text-purple-100 mb-6">Ready to tackle your assignments and continue your learning journey?</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="btn-primary text-white px-6 py-3 rounded-lg font-semibold" onclick="switchTab('assignments')">
+                            View Assignments
+                        </button>
+                        <button class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-30 transition-all">
+                            Study Planner
+                        </button>
+                    </div>
+                </div>
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white bg-opacity-10 rounded-full -mr-32 -mt-32"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-white bg-opacity-5 rounded-full -ml-24 -mb-24"></div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Science</h3>
-                <p class="text-gray-600">Tuesday 10:00 - Room 102</p>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 card-hover slide-in-left">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Pending Assignments</p>
+                            <p class="text-3xl font-bold text-gray-900">5</p>
+                            <p class="text-sm text-red-600">2 due this week</p>
+                        </div>
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 card-hover slide-in-left">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Current GPA</p>
+                            <p class="text-3xl font-bold text-gray-900">3.8</p>
+                            <p class="text-sm text-green-600">↗ +0.2 this semester</p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 card-hover slide-in-left">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Active Courses</p>
+                            <p class="text-3xl font-bold text-gray-900">6</p>
+                            <p class="text-sm text-blue-600">Spring 2024</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 card-hover slide-in-left">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Study Hours</p>
+                            <p class="text-3xl font-bold text-gray-900">24</p>
+                            <p class="text-sm text-purple-600">This week</p>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8 fade-in">
+                <h2 class="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button class="quick-action-btn bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg text-center" onclick="openSubmissionModal()">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm font-medium">Submit Assignment</span>
+                    </button>
+                    
+                    <button class="quick-action-btn bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg text-center" onclick="switchTab('grades')">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span class="text-sm font-medium">Check Grades</span>
+                    </button>
+                    
+                    <button class="quick-action-btn bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-lg text-center" onclick="switchTab('courses')">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"/>
+                        </svg>
+                        <span class="text-sm font-medium">View Courses</span>
+                    </button>
+                    
+                    <button class="quick-action-btn bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-lg text-center">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm font-medium">Study Planner</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity & Upcoming -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Recent Assignments -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 slide-in-left">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">Recent Assignments</h3>
+                        <button class="text-indigo-600 hover:text-indigo-800 font-medium" onclick="switchTab('assignments')">View All</button>
+                    </div>
+                    <div class="space-y-4" id="recentAssignments">
+                        <!-- Assignments will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Upcoming Deadlines -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 slide-in-right">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Upcoming Deadlines</h3>
+                    <div class="space-y-4" id="upcomingDeadlines">
+                        <!-- Deadlines will be populated here -->
+                    </div>
+                </div>
             </div>
         </div>
-        <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-8">Notifications</h2>
-        <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
-            <p class="text-gray-600">No new notifications.</p>
+
+        <!-- Assignments Tab -->
+        <div id="assignmentsTab" class="tab-content hidden">
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">Assignments</h1>
+                <button class="btn-primary text-white px-6 py-3 rounded-lg font-semibold" onclick="openSubmissionModal()">
+                    Submit Assignment
+                </button>
+            </div>
+
+            <!-- Assignment Filters -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                <div class="flex flex-wrap gap-4">
+                    <button class="filter-btn active px-4 py-2 rounded-lg bg-indigo-100 text-indigo-700 font-medium" data-filter="all">All</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200" data-filter="pending">Pending</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200" data-filter="submitted">Submitted</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200" data-filter="graded">Graded</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200" data-filter="overdue">Overdue</button>
+                </div>
+            </div>
+
+            <!-- Assignments List -->
+            <div class="space-y-6" id="assignmentsList">
+                <!-- Assignments will be populated here -->
+            </div>
+        </div>
+
+        <!-- Courses Tab -->
+        <div id="coursesTab" class="tab-content hidden">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8">My Courses</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="coursesList">
+                <!-- Courses will be populated here -->
+            </div>
+        </div>
+
+        <!-- Grades Tab -->
+        <div id="gradesTab" class="tab-content hidden">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8">Grades & Performance</h1>
+            
+            <!-- GPA Overview -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <p class="text-sm font-medium text-gray-600 mb-2">Current GPA</p>
+                        <p class="text-4xl font-bold text-gray-900">3.8</p>
+                        <p class="text-sm text-green-600">↗ +0.2 from last semester</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm font-medium text-gray-600 mb-2">Credits Completed</p>
+                        <p class="text-4xl font-bold text-gray-900">84</p>
+                        <p class="text-sm text-blue-600">36 remaining</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm font-medium text-gray-600 mb-2">Class Rank</p>
+                        <p class="text-4xl font-bold text-gray-900">15</p>
+                        <p class="text-sm text-purple-600">out of 120</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Grades -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-6">Course Grades</h3>
+                <div class="space-y-4" id="courseGrades">
+                    <!-- Course grades will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar Tab -->
+        <div id="calendarTab" class="tab-content hidden">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8">Academic Calendar</h1>
+            
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="text-center py-20">
+                    <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Calendar Coming Soon</h3>
+                    <p class="text-gray-600">Interactive calendar with assignments, exams, and important dates will be available here.</p>
+                </div>
+            </div>
         </div>
     </main>
-</body>
+
+    <!-- Assignment Submission Modal -->
+    <div id="submissionModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-2xl font-bold text-gray-900">Submit Assignment</h2>
+                        <button onclick="closeSubmissionModal()" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <form id="submissionForm" class="p-6 space-y-6">
+                    <!-- Assignment Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Assignment</label>
+                        <select id="assignmentSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <option value="">Choose an assignment...</option>
+                            <option value="cs201-project3">CS 201 - Data Structures Project</option>
+                            <option value="math101-hw5">MATH 101 - Calculus Problem Set</option>
+                            <option value="phys101-lab">PHYS 101 - Lab Report</option>
+                            <option value="eng102-essay">ENG 102 - Research Essay</option>
+                        </select>
+                    </div>
+
+                    <!-- File Upload Area -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Upload Files</label>
+                        <div id="uploadArea" class="upload-area border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                            <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                            <p class="text-gray-600 mb-2">Drag and drop files here, or</p>
+                            <button type="button" onclick="document.getElementById('fileInput').click()" class="text-indigo-600 hover:text-indigo-800 font-medium">browse files</button>
+                            <p class="text-xs text-gray-500 mt-2">Supports: PDF, DOC, DOCX, TXT, JPG, PNG (Max 10MB)</p>
+                        </div>
+                        <input type="file" id="fileInput" multiple class="hidden" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png">
+                    </div>
+
+                    <!-- Uploaded Files List -->
+                    <div id="uploadedFiles" class="hidden">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Uploaded Files</label>
+                        <div id="filesList" class="space-y-2">
+                            <!-- Uploaded files will appear here -->
+                        </div>
+                    </div>
+
+                    <!-- Comments -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Comments (Optional)</label>
+                        <textarea id="submissionComments" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent" placeholder="Add any comments or notes about your submission..."></textarea>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                        <button type="button" onclick="saveDraft()" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50">
+                            Save Draft
+                        </button>
+                        <button type="submit" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                            Submit Assignment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="floating-action">
+        <button onclick="openSubmissionModal()" class="btn-primary text-white w-14 h-14 rounded-full shadow-lg hover:shadow-xl">
+            <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeStudentDashboard();
+            setupEventListeners();
+            loadDashboardData();
+        });
+
+        let uploadedFiles = [];
+        let currentTab = 'dashboard';
+
+        function initializeStudentDashboard() {
+            console.log('Student dashboard initialized');
+            loadRecentAssignments();
+            loadUpcomingDeadlines();
+            loadAssignmentsList();
+            loadCoursesList();
+            loadCourseGrades();
+        }
+
+        function setupEventListeners() {
+            // Tab navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tab = this.dataset.tab;
+                    switchTab(tab);
+                });
+            });
+
+            // File upload
+            const fileInput = document.getElementById('fileInput');
+            const uploadArea = document.getElementById('uploadArea');
+
+            fileInput.addEventListener('change', handleFileSelect);
+
+            // Drag and drop
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                handleFiles(files);
+            });
+
+            // Form submission
+            document.getElementById('submissionForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitAssignment();
+            });
+
+            // Assignment filters
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active', 'bg-indigo-100', 'text-indigo-700');
+                        b.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    this.classList.add('active', 'bg-indigo-100', 'text-indigo-700');
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    
+                    const filter = this.dataset.filter;
+                    filterAssignments(filter);
+                });
+            });
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-gray-700', 'font-medium');
+                link.classList.add('text-gray-500');
+            });
+
+            const activeLink = document.querySelector(`[data-tab="${tabName}"]`);
+            if (activeLink) {
+                activeLink.classList.add('text-gray-700', 'font-medium');
+                activeLink.classList.remove('text-gray-500');
+            }
+
+            currentTab = tabName;
+        }
+
+        function loadRecentAssignments() {
+            const recentAssignments = [
+                { title: 'Data Structures Project', course: 'CS 201', status: 'pending', dueDate: 'Dec 18', priority: 'high' },
+                { title: 'Calculus Problem Set', course: 'MATH 101', status: 'submitted', dueDate: 'Dec 20', priority: 'medium' },
+                { title: 'Physics Lab Report', course: 'PHYS 101', status: 'graded', dueDate: 'Dec 15', priority: 'low', grade: 'A-' }
+            ];
+
+            const container = document.getElementById('recentAssignments');
+            container.innerHTML = recentAssignments.map(assignment => `
+                <div class="assignment-item flex items-center justify-between p-4 border border-gray-200 rounded-lg priority-${assignment.priority}">
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-900">${assignment.title}</h4>
+                        <p class="text-sm text-gray-600">${assignment.course}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full status-${assignment.status}">
+                            ${assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
+                        </span>
+                        <p class="text-xs text-gray-500 mt-1">Due ${assignment.dueDate}</p>
+                        ${assignment.grade ? `<p class="text-xs font-semibold text-green-600 mt-1">Grade: ${assignment.grade}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadUpcomingDeadlines() {
+            const deadlines = [
+                { title: 'CS 201 Project Submission', date: 'Dec 18', time: '11:59 PM', urgent: true },
+                { title: 'MATH 101 Quiz', date: 'Dec 19', time: '2:00 PM', urgent: false },
+                { title: 'ENG 102 Essay Draft', date: 'Dec 22', time: '5:00 PM', urgent: false },
+                { title: 'PHYS 101 Final Exam', date: 'Dec 25', time: '9:00 AM', urgent: false }
+            ];
+
+            const container = document.getElementById('upcomingDeadlines');
+            container.innerHTML = deadlines.map(deadline => `
+                <div class="flex items-center p-4 ${deadline.urgent ? 'bg-red-50 border border-red-200' : 'bg-gray-50 border border-gray-200'} rounded-lg">
+                    <div class="w-12 h-12 ${deadline.urgent ? 'bg-red-100' : 'bg-blue-100'} rounded-lg flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 ${deadline.urgent ? 'text-red-600' : 'text-blue-600'}" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-900">${deadline.title}</h4>
+                        <p class="text-sm text-gray-600">${deadline.date} at ${deadline.time}</p>
+                    </div>
+                    ${deadline.urgent ? '<span class="text-xs font-semibold text-red-600">URGENT</span>' : ''}
+                </div>
+            `).join('');
+        }
+
+        function loadAssignmentsList() {
+            const assignments = [
+                { id: 1, title: 'Data Structures Project', course: 'CS 201', status: 'pending', dueDate: 'Dec 18, 2024', priority: 'high', description: 'Implement a binary search tree with full CRUD operations' },
+                { id: 2, title: 'Calculus Problem Set', course: 'MATH 101', status: 'submitted', dueDate: 'Dec 20, 2024', priority: 'medium', description: 'Solve integration problems from Chapter 7' },
+                { id: 3, title: 'Physics Lab Report', course: 'PHYS 101', status: 'graded', dueDate: 'Dec 15, 2024', priority: 'low', description: 'Analyze pendulum motion experiment results', grade: 'A-' },
+                { id: 4, title: 'Research Essay', course: 'ENG 102', status: 'draft', dueDate: 'Dec 22, 2024', priority: 'medium', description: 'Write a 2000-word essay on climate change impacts' },
+                { id: 5, title: 'Database Design', course: 'CS 301', status: 'overdue', dueDate: 'Dec 10, 2024', priority: 'high', description: 'Design and implement a relational database schema' }
+            ];
+
+            const container = document.getElementById('assignmentsList');
+            container.innerHTML = assignments.map(assignment => `
+                <div class="assignment-card bg-white rounded-xl shadow-sm border border-gray-200 p-6 priority-${assignment.priority}">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">${assignment.title}</h3>
+                            <p class="text-sm text-gray-600 mb-2">${assignment.course}</p>
+                            <p class="text-sm text-gray-700">${assignment.description}</p>
+                        </div>
+                        <div class="text-right ml-4">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full status-${assignment.status}">
+                                ${assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
+                            </span>
+                            ${assignment.grade ? `<p class="text-sm font-semibold text-green-600 mt-2">Grade: ${assignment.grade}</p>` : ''}
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                        <p class="text-sm text-gray-600">Due: ${assignment.dueDate}</p>
+                        <div class="flex space-x-2">
+                            ${assignment.status === 'pending' || assignment.status === 'draft' ? 
+                                `<button onclick="openSubmissionModal('${assignment.id}')" class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700">Submit</button>` : 
+                                `<button class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200">View Details</button>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadCoursesList() {
+            const courses = [
+                { id: 1, name: 'Data Structures & Algorithms', code: 'CS 201', instructor: 'Dr. Smith', progress: 85, grade: 'A-', credits: 4 },
+                { id: 2, name: 'Calculus I', code: 'MATH 101', instructor: 'Prof. Johnson', progress: 92, grade: 'A', credits: 3 },
+                { id: 3, name: 'Physics I', code: 'PHYS 101', instructor: 'Dr. Wilson', progress: 78, grade: 'B+', credits: 4 },
+                { id: 4, name: 'English Composition', code: 'ENG 102', instructor: 'Prof. Davis', progress: 88, grade: 'A-', credits: 3 },
+                { id: 5, name: 'Database Systems', code: 'CS 301', instructor: 'Dr. Brown', progress: 65, grade: 'B', credits: 3 },
+                { id: 6, name: 'Statistics', code: 'MATH 201', instructor: 'Prof. Lee', progress: 95, grade: 'A+', credits: 3 }
+            ];
+
+            const container = document.getElementById('coursesList');
+            container.innerHTML = courses.map(course => `
+                <div class="course-card rounded-xl p-6 card-hover">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-1">${course.name}</h3>
+                            <p class="text-sm text-gray-600 mb-2">${course.code} • ${course.instructor}</p>
+                            <p class="text-sm text-gray-600">${course.credits} Credits</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                                ${course.grade}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-medium text-gray-700">Progress</span>
+                            <span class="text-sm font-semibold text-indigo-600">${course.progress}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="progress-bar bg-indigo-500 h-2 rounded-full" style="width: ${course.progress}%"></div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="flex-1 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700">
+                            View Course
+                        </button>
+                        <button class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200">
+                            Materials
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadCourseGrades() {
+            const courseGrades = [
+                { course: 'CS 201', name: 'Data Structures', grade: 'A-', percentage: 88, credits: 4 },
+                { course: 'MATH 101', name: 'Calculus I', grade: 'A', percentage: 94, credits: 3 },
+                { course: 'PHYS 101', name: 'Physics I', grade: 'B+', percentage: 87, credits: 4 },
+                { course: 'ENG 102', name: 'English Composition', grade: 'A-', percentage: 90, credits: 3 },
+                { course: 'CS 301', name: 'Database Systems', grade: 'B', percentage: 82, credits: 3 },
+                { course: 'MATH 201', name: 'Statistics', grade: 'A+', percentage: 97, credits: 3 }
+            ];
+
+            const container = document.getElementById('courseGrades');
+            container.innerHTML = courseGrades.map(course => `
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-900">${course.name}</h4>
+                        <p class="text-sm text-gray-600">${course.course} • ${course.credits} Credits</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-lg font-bold text-gray-900">${course.percentage}%</span>
+                            <span class="px-3 py-1 bg-green-100 text-green-800 font-medium rounded-full">
+                                ${course.grade}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterAssignments(filter) {
+            const assignments = document.querySelectorAll('.assignment-card');
+            assignments.forEach(assignment => {
+                const status = assignment.querySelector('.status-pending, .status-submitted, .status-graded, .status-overdue, .status-draft');
+                if (filter === 'all') {
+                    assignment.style.display = 'block';
+                } else {
+                    const hasStatus = status && status.classList.contains(`status-${filter}`);
+                    assignment.style.display = hasStatus ? 'block' : 'none';
+                }
+            });
+        }
+
+        function openSubmissionModal(assignmentId = null) {
+            document.getElementById('submissionModal').classList.remove('hidden');
+            if (assignmentId) {
+                // Pre-select assignment if ID provided
+                const select = document.getElementById('assignmentSelect');
+                // This would normally set the value based on the assignment ID
+            }
+        }
+
+        function closeSubmissionModal() {
+            document.getElementById('submissionModal').classList.add('hidden');
+            resetSubmissionForm();
+        }
+
+        function resetSubmissionForm() {
+            document.getElementById('submissionForm').reset();
+            uploadedFiles = [];
+            document.getElementById('uploadedFiles').classList.add('hidden');
+            document.getElementById('filesList').innerHTML = '';
+        }
+
+        function handleFileSelect(e) {
+            handleFiles(e.target.files);
+        }
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                    showNotification('File size must be less than 10MB', 'error');
+                    return;
+                }
+                
+                uploadedFiles.push(file);
+                addFileToList(file);
+            });
+            
+            if (uploadedFiles.length > 0) {
+                document.getElementById('uploadedFiles').classList.remove('hidden');
+            }
+        }
+
+        function addFileToList(file) {
+            const filesList = document.getElementById('filesList');
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item flex items-center justify-between p-3 bg-gray-50 rounded-lg';
+            
+            fileItem.innerHTML = `
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-gray-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">${file.name}</p>
+                        <p class="text-xs text-gray-500">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                    </div>
+                </div>
+                <button onclick="removeFile('${file.name}')" class="text-red-500 hover:text-red-700">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            `;
+            
+            filesList.appendChild(fileItem);
+        }
+
+        function removeFile(fileName) {
+            uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+            const fileItems = document.querySelectorAll('.file-item');
+            fileItems.forEach(item => {
+                if (item.textContent.includes(fileName)) {
+                    item.remove();
+                }
+            });
+            
+            if (uploadedFiles.length === 0) {
+                document.getElementById('uploadedFiles').classList.add('hidden');
+            }
+        }
+
+        function saveDraft() {
+            const assignmentId = document.getElementById('assignmentSelect').value;
+            const comments = document.getElementById('submissionComments').value;
+            
+            if (!assignmentId) {
+                showNotification('Please select an assignment', 'error');
+                return;
+            }
+            
+            // Simulate saving draft
+            showNotification('Draft saved successfully!', 'success');
+            closeSubmissionModal();
+        }
+
+        function submitAssignment() {
+            const assignmentId = document.getElementById('assignmentSelect').value;
+            const comments = document.getElementById('submissionComments').value;
+            
+            if (!assignmentId) {
+                showNotification('Please select an assignment', 'error');
+                return;
+            }
+            
+            if (uploadedFiles.length === 0) {
+                showNotification('Please upload at least one file', 'error');
+                return;
+            }
+            
+            // Simulate submission
+            showNotification('Assignment submitted successfully!', 'success');
+            closeSubmissionModal();
+            
+            // Refresh assignments list
+            setTimeout(() => {
+                loadAssignmentsList();
+                loadRecentAssignments();
+            }, 1000);
+        }
+
+        function loadDashboardData() {
+            // Simulate loading dashboard data
+            console.log('Dashboard data loaded');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm notification`;
+            
+            const colors = {
+                success: 'bg-green-500 text-white',
+                error: 'bg-red-500 text-white',
+                warning: 'bg-yellow-500 text-white',
+                info: 'bg-blue-500 text-white'
+            };
+            
+            notification.className += ` ${colors[type] || colors.info}`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <div class="flex-1">
+                        <p class="text-sm font-medium">${message}</p>
+                    </div>
+                    <button class="ml-3 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+
+        console.log('Smart Classroom Student Dashboard initialized successfully');
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9836dbb117ddf64b',t:'MTc1ODU5NzEyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

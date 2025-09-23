@@ -3,38 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard - Smart Classroom</title>
+    <title>Smart Classroom - Teacher Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: all 0.3s ease; }
-        .btn-primary:hover { background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%); transform: translateY(-1px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
-        .fade-in { animation: fadeIn 0.6s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .modal { backdrop-filter: blur(10px); }
-        .progress-bar { transition: width 0.5s ease; }
-        .notification { animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        .tab-active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .student-avatar { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .assignment-urgent { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
-        .assignment-pending { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
-        .assignment-completed { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        
+        .teacher-gradient {
+            background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(5, 150, 105, 0.4);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.6s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+        
+        .grade-input {
+            transition: all 0.2s ease;
+        }
+        
+        .grade-input:focus {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+        }
+        
+        .student-row {
+            transition: all 0.3s ease;
+        }
+        
+        .student-row:hover {
+            background-color: #f0fdf4;
+            border-left: 4px solid #059669;
+        }
+        
+        .notification {
+            animation: slideInNotification 0.3s ease-out;
+        }
+        
+        @keyframes slideInNotification {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .modal {
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .tab-content {
+            animation: tabFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .assignment-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            border: 1px solid #bbf7d0;
+        }
+        
+        .class-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .floating-action {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 50;
+        }
+        
+        .quick-action-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .grade-badge {
+            transition: all 0.2s ease;
+        }
+        
+        .grade-badge:hover {
+            transform: scale(1.1);
+        }
+        
+        .attendance-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .present { background-color: #10b981; }
+        .absent { background-color: #ef4444; }
+        .late { background-color: #f59e0b; }
+        .excused { background-color: #6b7280; }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        
+        .data-table {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .data-table::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .data-table::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        .data-table::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        
+        .rubric-item {
+            transition: all 0.2s ease;
+        }
+        
+        .rubric-item:hover {
+            background-color: #f9fafb;
+        }
+        
+        .assignment-type-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+        }
+        
+        .type-homework { background-color: #dbeafe; color: #1e40af; }
+        .type-quiz { background-color: #fef3c7; color: #92400e; }
+        .type-exam { background-color: #fee2e2; color: #991b1b; }
+        .type-project { background-color: #e0e7ff; color: #3730a3; }
+        
+        .priority-indicator {
+            width: 4px;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .priority-high { background-color: #ef4444; }
+        .priority-medium { background-color: #f59e0b; }
+        .priority-low { background-color: #10b981; }
     </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navigation Header -->
-    <nav class="bg-white shadow-lg border-b border-gray-200">
+    <nav class="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
+                <!-- Logo and Brand -->
                 <div class="flex items-center">
-                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-2 rounded-lg">
+                    <div class="bg-gradient-to-r from-green-600 to-emerald-700 p-2 rounded-lg">
                         <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z" clip-rule="evenodd"/>
+                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
                         </svg>
                     </div>
                     <div class="ml-3">
@@ -42,30 +234,963 @@
                         <p class="text-sm text-gray-600">Teacher Portal</p>
                     </div>
                 </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="nav-link text-gray-700 hover:text-green-600 font-medium transition-colors" data-tab="dashboard">Dashboard</a>
+                    <a href="#" class="nav-link text-gray-500 hover:text-green-600 transition-colors" data-tab="classes">My Classes</a>
+                    <a href="#" class="nav-link text-gray-500 hover:text-green-600 transition-colors" data-tab="assignments">Assignments</a>
+                    <a href="#" class="nav-link text-gray-500 hover:text-green-600 transition-colors" data-tab="gradebook">Gradebook</a>
+                    <a href="#" class="nav-link text-gray-500 hover:text-green-600 transition-colors" data-tab="analytics">Analytics</a>
+                </div>
+
+                <!-- User Profile -->
                 <div class="flex items-center space-x-4">
-                    <a href="/" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Home</a>
-                    <a href="/logout" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                    <!-- Notifications -->
+                    <div class="relative">
+                        <button class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg relative">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+                            </svg>
+                            <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+
+                    <!-- User Avatar -->
+                    <div class="flex items-center space-x-3">
+                        <div class="text-right">
+                            <p class="text-sm font-medium text-gray-900">Dr. Sarah Wilson</p>
+                            <p class="text-xs text-gray-600">Computer Science Dept.</p>
+                        </div>
+                        <div class="w-10 h-10 bg-gradient-to-r from-green-600 to-emerald-700 rounded-full flex items-center justify-center">
+                            <span class="text-white font-semibold text-sm">SW</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
+    <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-8">Your Classes</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Math</h3>
-                <p class="text-gray-600">Monday 08:00 - Room 101</p>
+        <!-- Dashboard Tab -->
+        <div id="dashboardTab" class="tab-content">
+            <!-- Welcome Section -->
+            <div class="teacher-gradient text-white rounded-2xl p-8 mb-8 relative overflow-hidden fade-in">
+                <div class="relative z-10">
+                    <h1 class="text-3xl md:text-4xl font-bold mb-4">Good morning, Dr. Wilson! 🌟</h1>
+                    <p class="text-lg text-green-100 mb-6">You have 3 classes today and 12 assignments to review.</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button class="btn-primary text-white px-6 py-3 rounded-lg font-semibold" onclick="openAssignmentModal()">
+                            Create Assignment
+                        </button>
+                        <button class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg text-white px-6 py-3 rounded-lg font-semibold hover:bg-opacity-30 transition-all" onclick="switchTab('gradebook')">
+                            Grade Assignments
+                        </button>
+                    </div>
+                </div>
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white bg-opacity-10 rounded-full -mr-32 -mt-32"></div>
+                <div class="absolute bottom-0 left-0 w-48 h-48 bg-white bg-opacity-5 rounded-full -ml-24 -mb-24"></div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Science</h3>
-                <p class="text-gray-600">Tuesday 10:00 - Room 102</p>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 card-hover slide-in-left">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Total Students</p>
+                            <p class="text-3xl font-bold text-gray-900">127</p>
+                            <p class="text-sm text-green-600">Across 4 classes</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 card-hover slide-in-left">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Pending Grades</p>
+                            <p class="text-3xl font-bold text-gray-900">23</p>
+                            <p class="text-sm text-orange-600">Need attention</p>
+                        </div>
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 card-hover slide-in-left">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Class Average</p>
+                            <p class="text-3xl font-bold text-gray-900">85.2%</p>
+                            <p class="text-sm text-green-600">↗ +2.1% this week</p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-200 card-hover slide-in-left">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Attendance Rate</p>
+                            <p class="text-3xl font-bold text-gray-900">94%</p>
+                            <p class="text-sm text-green-600">This semester</p>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8 fade-in">
+                <h2 class="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button class="quick-action-btn bg-green-500 hover:bg-green-600 text-white p-4 rounded-lg text-center" onclick="openAssignmentModal()">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm font-medium">Create Assignment</span>
+                    </button>
+                    
+                    <button class="quick-action-btn bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg text-center" onclick="switchTab('gradebook')">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span class="text-sm font-medium">Grade Assignments</span>
+                    </button>
+                    
+                    <button class="quick-action-btn bg-purple-500 hover:bg-purple-600 text-white p-4 rounded-lg text-center" onclick="openAttendanceModal()">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm font-medium">Take Attendance</span>
+                    </button>
+                    
+                    <button class="quick-action-btn bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-lg text-center" onclick="openAnnouncementModal()">
+                        <svg class="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="text-sm font-medium">Send Announcement</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity & Today's Schedule -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Recent Submissions -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 slide-in-left">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">Recent Submissions</h3>
+                        <button class="text-green-600 hover:text-green-800 font-medium" onclick="switchTab('gradebook')">View All</button>
+                    </div>
+                    <div class="space-y-4" id="recentSubmissions">
+                        <!-- Submissions will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Today's Schedule -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 slide-in-right">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Today's Schedule</h3>
+                    <div class="space-y-4" id="todaySchedule">
+                        <!-- Schedule will be populated here -->
+                    </div>
+                </div>
             </div>
         </div>
-        <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-8">Notifications</h2>
-        <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
-            <p class="text-gray-600">No new notifications.</p>
+
+        <!-- Classes Tab -->
+        <div id="classesTab" class="tab-content hidden">
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">My Classes</h1>
+                <button class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                    Add New Class
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="classesList">
+                <!-- Classes will be populated here -->
+            </div>
+        </div>
+
+        <!-- Assignments Tab -->
+        <div id="assignmentsTab" class="tab-content hidden">
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">Assignments</h1>
+                <button class="btn-primary text-white px-6 py-3 rounded-lg font-semibold" onclick="openAssignmentModal()">
+                    Create Assignment
+                </button>
+            </div>
+
+            <!-- Assignment Filters -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+                <div class="flex flex-wrap gap-4">
+                    <button class="filter-btn active px-4 py-2 rounded-lg bg-green-100 text-green-700 font-medium" data-filter="all">All</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200" data-filter="active">Active</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200" data-filter="draft">Draft</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200" data-filter="graded">Graded</button>
+                    <button class="filter-btn px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200" data-filter="overdue">Overdue</button>
+                </div>
+            </div>
+
+            <!-- Assignments List -->
+            <div class="space-y-6" id="assignmentsList">
+                <!-- Assignments will be populated here -->
+            </div>
+        </div>
+
+        <!-- Gradebook Tab -->
+        <div id="gradebookTab" class="tab-content hidden">
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">Gradebook</h1>
+                <div class="flex space-x-4">
+                    <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <option>All Classes</option>
+                        <option>CS 101 - Intro to Programming</option>
+                        <option>CS 201 - Data Structures</option>
+                        <option>CS 301 - Algorithms</option>
+                    </select>
+                    <button class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                        Export Grades
+                    </button>
+                </div>
+            </div>
+
+            <!-- Gradebook Table -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="data-table">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 sticky top-0">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assignment 1</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quiz 1</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Midterm</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Average</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="gradebookTable">
+                            <!-- Gradebook rows will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analyticsTab" class="tab-content hidden">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8">Class Analytics</h1>
+            
+            <!-- Analytics Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Performance Chart -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Class Performance Trends</h3>
+                    <div class="chart-container">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Grade Distribution -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Grade Distribution</h3>
+                    <div class="chart-container">
+                        <canvas id="gradeDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Summary -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-6">Performance Summary</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <p class="text-2xl font-bold text-green-600">85.2%</p>
+                        <p class="text-sm text-gray-600">Class Average</p>
+                    </div>
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <p class="text-2xl font-bold text-blue-600">94%</p>
+                        <p class="text-sm text-gray-600">Submission Rate</p>
+                    </div>
+                    <div class="text-center p-4 bg-purple-50 rounded-lg">
+                        <p class="text-2xl font-bold text-purple-600">12</p>
+                        <p class="text-sm text-gray-600">Students at Risk</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
-</body>
+
+    <!-- Assignment Creation Modal -->
+    <div id="assignmentModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-2xl font-bold text-gray-900">Create New Assignment</h2>
+                        <button onclick="closeAssignmentModal()" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <form id="assignmentForm" class="p-6 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Assignment Title -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Assignment Title</label>
+                            <input type="text" id="assignmentTitle" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Enter assignment title...">
+                        </div>
+
+                        <!-- Class Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Class</label>
+                            <select id="assignmentClass" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                <option value="">Select a class...</option>
+                                <option value="cs101">CS 101 - Intro to Programming</option>
+                                <option value="cs201">CS 201 - Data Structures</option>
+                                <option value="cs301">CS 301 - Algorithms</option>
+                            </select>
+                        </div>
+
+                        <!-- Assignment Type -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Type</label>
+                            <select id="assignmentType" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                                <option value="homework">Homework</option>
+                                <option value="quiz">Quiz</option>
+                                <option value="exam">Exam</option>
+                                <option value="project">Project</option>
+                            </select>
+                        </div>
+
+                        <!-- Points -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Total Points</label>
+                            <input type="number" id="assignmentPoints" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="100">
+                        </div>
+
+                        <!-- Due Date -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
+                            <input type="datetime-local" id="assignmentDueDate" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+
+                        <!-- Available Date -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Available From</label>
+                            <input type="datetime-local" id="assignmentAvailableDate" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea id="assignmentDescription" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Provide detailed instructions for the assignment..."></textarea>
+                    </div>
+
+                    <!-- Rubric -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Grading Rubric</label>
+                        <div class="space-y-3" id="rubricItems">
+                            <div class="rubric-item flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
+                                <input type="text" placeholder="Criteria (e.g., Code Quality)" class="flex-1 p-2 border border-gray-300 rounded">
+                                <input type="number" placeholder="Points" class="w-20 p-2 border border-gray-300 rounded">
+                                <button type="button" onclick="removeRubricItem(this)" class="text-red-500 hover:text-red-700">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" onclick="addRubricItem()" class="mt-3 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                            Add Rubric Item
+                        </button>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                        <button type="button" onclick="saveDraftAssignment()" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50">
+                            Save as Draft
+                        </button>
+                        <button type="submit" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                            Publish Assignment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance Modal -->
+    <div id="attendanceModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-2xl font-bold text-gray-900">Take Attendance</h2>
+                        <button onclick="closeAttendanceModal()" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="p-6">
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Select Class</label>
+                        <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <option>CS 101 - Intro to Programming</option>
+                            <option>CS 201 - Data Structures</option>
+                            <option>CS 301 - Algorithms</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-3" id="attendanceList">
+                        <!-- Attendance list will be populated here -->
+                    </div>
+
+                    <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200 mt-6">
+                        <button onclick="closeAttendanceModal()" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button onclick="saveAttendance()" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                            Save Attendance
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="floating-action">
+        <button onclick="openAssignmentModal()" class="btn-primary text-white w-14 h-14 rounded-full shadow-lg hover:shadow-xl">
+            <svg class="w-6 h-6 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTeacherDashboard();
+            setupEventListeners();
+            loadDashboardData();
+        });
+
+        let currentTab = 'dashboard';
+
+        function initializeTeacherDashboard() {
+            console.log('Teacher dashboard initialized');
+            loadRecentSubmissions();
+            loadTodaySchedule();
+            loadClassesList();
+            loadAssignmentsList();
+            loadGradebookData();
+            loadAttendanceList();
+        }
+
+        function setupEventListeners() {
+            // Tab navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tab = this.dataset.tab;
+                    switchTab(tab);
+                });
+            });
+
+            // Assignment form submission
+            document.getElementById('assignmentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                publishAssignment();
+            });
+
+            // Assignment filters
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('active', 'bg-green-100', 'text-green-700');
+                        b.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    this.classList.add('active', 'bg-green-100', 'text-green-700');
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    
+                    const filter = this.dataset.filter;
+                    filterAssignments(filter);
+                });
+            });
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-gray-700', 'font-medium');
+                link.classList.add('text-gray-500');
+            });
+
+            const activeLink = document.querySelector(`[data-tab="${tabName}"]`);
+            if (activeLink) {
+                activeLink.classList.add('text-gray-700', 'font-medium');
+                activeLink.classList.remove('text-gray-500');
+            }
+
+            currentTab = tabName;
+
+            // Load tab-specific data
+            if (tabName === 'analytics') {
+                setTimeout(initializeCharts, 100);
+            }
+        }
+
+        function loadRecentSubmissions() {
+            const submissions = [
+                { student: 'Alice Johnson', assignment: 'Data Structures Project', submitted: '2 hours ago', status: 'pending' },
+                { student: 'Bob Smith', assignment: 'Algorithm Analysis', submitted: '4 hours ago', status: 'graded' },
+                { student: 'Carol Davis', assignment: 'Programming Quiz', submitted: '1 day ago', status: 'pending' },
+                { student: 'David Wilson', assignment: 'Final Project', submitted: '2 days ago', status: 'graded' }
+            ];
+
+            const container = document.getElementById('recentSubmissions');
+            container.innerHTML = submissions.map(submission => `
+                <div class="student-row flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-900">${submission.student}</h4>
+                        <p class="text-sm text-gray-600">${submission.assignment}</p>
+                        <p class="text-xs text-gray-500">Submitted ${submission.submitted}</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full ${submission.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}">
+                            ${submission.status.charAt(0).toUpperCase() + submission.status.slice(1)}
+                        </span>
+                        <button class="block mt-2 text-xs text-green-600 hover:text-green-800 font-medium">
+                            ${submission.status === 'pending' ? 'Grade Now' : 'View Grade'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadTodaySchedule() {
+            const schedule = [
+                { time: '9:00 AM', class: 'CS 101 - Intro to Programming', room: 'Room 201', students: 32 },
+                { time: '11:00 AM', class: 'CS 201 - Data Structures', room: 'Room 305', students: 28 },
+                { time: '2:00 PM', class: 'CS 301 - Algorithms', room: 'Room 201', students: 24 },
+                { time: '4:00 PM', class: 'Office Hours', room: 'Office 412', students: 0 }
+            ];
+
+            const container = document.getElementById('todaySchedule');
+            container.innerHTML = schedule.map(item => `
+                <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+                    <div class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                        <span class="text-sm font-semibold text-green-600">${item.time}</span>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-900">${item.class}</h4>
+                        <p class="text-sm text-gray-600">${item.room}${item.students > 0 ? ` • ${item.students} students` : ''}</p>
+                    </div>
+                    <button class="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600">
+                        ${item.students > 0 ? 'Take Attendance' : 'View Details'}
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function loadClassesList() {
+            const classes = [
+                { id: 1, name: 'Intro to Programming', code: 'CS 101', students: 32, semester: 'Spring 2024', average: 87.5 },
+                { id: 2, name: 'Data Structures', code: 'CS 201', students: 28, semester: 'Spring 2024', average: 84.2 },
+                { id: 3, name: 'Algorithms', code: 'CS 301', students: 24, semester: 'Spring 2024', average: 89.1 },
+                { id: 4, name: 'Database Systems', code: 'CS 401', students: 20, semester: 'Spring 2024', average: 86.8 }
+            ];
+
+            const container = document.getElementById('classesList');
+            container.innerHTML = classes.map(cls => `
+                <div class="class-card rounded-xl p-6 card-hover">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-1">${cls.name}</h3>
+                            <p class="text-sm text-gray-600 mb-2">${cls.code} • ${cls.semester}</p>
+                            <p class="text-sm text-gray-600">${cls.students} Students</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                                ${cls.average}% Avg
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="flex-1 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700">
+                            View Class
+                        </button>
+                        <button class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200" onclick="openAttendanceModal()">
+                            Attendance
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadAssignmentsList() {
+            const assignments = [
+                { id: 1, title: 'Data Structures Project', class: 'CS 201', type: 'project', status: 'active', dueDate: 'Dec 20, 2024', submissions: 24, total: 28 },
+                { id: 2, title: 'Algorithm Quiz', class: 'CS 301', type: 'quiz', status: 'graded', dueDate: 'Dec 15, 2024', submissions: 24, total: 24 },
+                { id: 3, title: 'Programming Assignment', class: 'CS 101', type: 'homework', status: 'active', dueDate: 'Dec 22, 2024', submissions: 18, total: 32 },
+                { id: 4, title: 'Database Design', class: 'CS 401', type: 'project', status: 'draft', dueDate: 'Dec 25, 2024', submissions: 0, total: 20 }
+            ];
+
+            const container = document.getElementById('assignmentsList');
+            container.innerHTML = assignments.map(assignment => `
+                <div class="assignment-card rounded-xl p-6 relative">
+                    <div class="priority-indicator priority-${assignment.status === 'active' ? 'high' : assignment.status === 'draft' ? 'medium' : 'low'}"></div>
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">${assignment.title}</h3>
+                            <p class="text-sm text-gray-600 mb-2">${assignment.class}</p>
+                            <span class="assignment-type-badge type-${assignment.type}">${assignment.type.charAt(0).toUpperCase() + assignment.type.slice(1)}</span>
+                        </div>
+                        <div class="text-right ml-4">
+                            <span class="px-3 py-1 text-xs font-medium rounded-full ${
+                                assignment.status === 'active' ? 'bg-green-100 text-green-800' :
+                                assignment.status === 'draft' ? 'bg-gray-100 text-gray-800' :
+                                'bg-blue-100 text-blue-800'
+                            }">
+                                ${assignment.status.charAt(0).toUpperCase() + assignment.status.slice(1)}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                        <div>
+                            <p class="text-sm text-gray-600">Due: ${assignment.dueDate}</p>
+                            <p class="text-sm text-gray-600">Submissions: ${assignment.submissions}/${assignment.total}</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700">
+                                ${assignment.status === 'draft' ? 'Publish' : 'Grade'}
+                            </button>
+                            <button class="px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200">
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadGradebookData() {
+            const students = [
+                { name: 'Alice Johnson', id: 'AJ001', assignment1: 95, quiz1: 88, midterm: 92, project: 89, average: 91 },
+                { name: 'Bob Smith', id: 'BS002', assignment1: 87, quiz1: 92, midterm: 85, project: 94, average: 89.5 },
+                { name: 'Carol Davis', id: 'CD003', assignment1: 92, quiz1: 85, midterm: 88, project: 91, average: 89 },
+                { name: 'David Wilson', id: 'DW004', assignment1: 78, quiz1: 82, midterm: 79, project: 85, average: 81 },
+                { name: 'Emma Brown', id: 'EB005', assignment1: 94, quiz1: 96, midterm: 93, project: 97, average: 95 }
+            ];
+
+            const container = document.getElementById('gradebookTable');
+            container.innerHTML = students.map(student => `
+                <tr class="student-row">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                <span class="text-white font-semibold text-sm">${student.name.split(' ').map(n => n[0]).join('')}</span>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">${student.name}</div>
+                                <div class="text-sm text-gray-500">${student.id}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <input type="number" value="${student.assignment1}" class="grade-input w-16 p-1 text-center border border-gray-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <input type="number" value="${student.quiz1}" class="grade-input w-16 p-1 text-center border border-gray-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <input type="number" value="${student.midterm}" class="grade-input w-16 p-1 text-center border border-gray-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <input type="number" value="${student.project}" class="grade-input w-16 p-1 text-center border border-gray-300 rounded focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="grade-badge px-3 py-1 text-sm font-semibold rounded-full ${
+                            student.average >= 90 ? 'bg-green-100 text-green-800' :
+                            student.average >= 80 ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-red-100 text-red-800'
+                        }">
+                            ${student.average}%
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadAttendanceList() {
+            const students = [
+                { name: 'Alice Johnson', id: 'AJ001', status: 'present' },
+                { name: 'Bob Smith', id: 'BS002', status: 'present' },
+                { name: 'Carol Davis', id: 'CD003', status: 'absent' },
+                { name: 'David Wilson', id: 'DW004', status: 'late' },
+                { name: 'Emma Brown', id: 'EB005', status: 'present' }
+            ];
+
+            const container = document.getElementById('attendanceList');
+            container.innerHTML = students.map(student => `
+                <div class="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-white font-semibold text-sm">${student.name.split(' ').map(n => n[0]).join('')}</span>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900">${student.name}</p>
+                            <p class="text-sm text-gray-600">${student.id}</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="attendance-btn px-3 py-1 text-xs font-medium rounded-full ${student.status === 'present' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700'}" data-status="present" onclick="setAttendance(this, 'present')">
+                            Present
+                        </button>
+                        <button class="attendance-btn px-3 py-1 text-xs font-medium rounded-full ${student.status === 'absent' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-700'}" data-status="absent" onclick="setAttendance(this, 'absent')">
+                            Absent
+                        </button>
+                        <button class="attendance-btn px-3 py-1 text-xs font-medium rounded-full ${student.status === 'late' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-700'}" data-status="late" onclick="setAttendance(this, 'late')">
+                            Late
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function initializeCharts() {
+            // Performance Chart
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(performanceCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                    datasets: [{
+                        label: 'Class Average',
+                        data: [82, 85, 83, 87, 89, 85],
+                        borderColor: '#059669',
+                        backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Grade Distribution Chart
+            const gradeCtx = document.getElementById('gradeDistributionChart').getContext('2d');
+            new Chart(gradeCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['A (90-100)', 'B (80-89)', 'C (70-79)', 'D (60-69)', 'F (0-59)'],
+                    datasets: [{
+                        data: [35, 40, 20, 4, 1],
+                        backgroundColor: [
+                            '#10b981',
+                            '#3b82f6',
+                            '#f59e0b',
+                            '#ef4444',
+                            '#6b7280'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        }
+                    }
+                }
+            });
+        }
+
+        function filterAssignments(filter) {
+            const assignments = document.querySelectorAll('.assignment-card');
+            assignments.forEach(assignment => {
+                if (filter === 'all') {
+                    assignment.style.display = 'block';
+                } else {
+                    const statusElement = assignment.querySelector('.rounded-full');
+                    const status = statusElement.textContent.toLowerCase().trim();
+                    assignment.style.display = status === filter ? 'block' : 'none';
+                }
+            });
+        }
+
+        function openAssignmentModal() {
+            document.getElementById('assignmentModal').classList.remove('hidden');
+        }
+
+        function closeAssignmentModal() {
+            document.getElementById('assignmentModal').classList.add('hidden');
+            document.getElementById('assignmentForm').reset();
+        }
+
+        function openAttendanceModal() {
+            document.getElementById('attendanceModal').classList.remove('hidden');
+        }
+
+        function closeAttendanceModal() {
+            document.getElementById('attendanceModal').classList.add('hidden');
+        }
+
+        function openAnnouncementModal() {
+            showNotification('Announcement feature coming soon!', 'info');
+        }
+
+        function addRubricItem() {
+            const rubricItems = document.getElementById('rubricItems');
+            const newItem = document.createElement('div');
+            newItem.className = 'rubric-item flex items-center space-x-3 p-3 border border-gray-200 rounded-lg';
+            newItem.innerHTML = `
+                <input type="text" placeholder="Criteria" class="flex-1 p-2 border border-gray-300 rounded">
+                <input type="number" placeholder="Points" class="w-20 p-2 border border-gray-300 rounded">
+                <button type="button" onclick="removeRubricItem(this)" class="text-red-500 hover:text-red-700">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            `;
+            rubricItems.appendChild(newItem);
+        }
+
+        function removeRubricItem(button) {
+            button.closest('.rubric-item').remove();
+        }
+
+        function saveDraftAssignment() {
+            showNotification('Assignment saved as draft!', 'success');
+            closeAssignmentModal();
+        }
+
+        function publishAssignment() {
+            const title = document.getElementById('assignmentTitle').value;
+            const className = document.getElementById('assignmentClass').value;
+            
+            if (!title || !className) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            showNotification('Assignment published successfully!', 'success');
+            closeAssignmentModal();
+            
+            // Refresh assignments list
+            setTimeout(() => {
+                loadAssignmentsList();
+            }, 1000);
+        }
+
+        function setAttendance(button, status) {
+            const row = button.closest('.flex');
+            const buttons = row.querySelectorAll('.attendance-btn');
+            
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800', 'bg-yellow-100', 'text-yellow-800');
+                btn.classList.add('bg-gray-100', 'text-gray-700');
+            });
+            
+            const colors = {
+                present: ['bg-green-100', 'text-green-800'],
+                absent: ['bg-red-100', 'text-red-800'],
+                late: ['bg-yellow-100', 'text-yellow-800']
+            };
+            
+            button.classList.remove('bg-gray-100', 'text-gray-700');
+            button.classList.add(...colors[status]);
+        }
+
+        function saveAttendance() {
+            showNotification('Attendance saved successfully!', 'success');
+            closeAttendanceModal();
+        }
+
+        function loadDashboardData() {
+            console.log('Dashboard data loaded');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm notification`;
+            
+            const colors = {
+                success: 'bg-green-500 text-white',
+                error: 'bg-red-500 text-white',
+                warning: 'bg-yellow-500 text-white',
+                info: 'bg-blue-500 text-white'
+            };
+            
+            notification.className += ` ${colors[type] || colors.info}`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <div class="flex-1">
+                        <p class="text-sm font-medium">${message}</p>
+                    </div>
+                    <button class="ml-3 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+
+        console.log('Smart Classroom Teacher Dashboard initialized successfully');
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9836e1bd657df64b',t:'MTc1ODU5NzM3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
