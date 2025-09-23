@@ -31,7 +31,6 @@
     <nav class="bg-white shadow-lg border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- Logo and Brand -->
                 <div class="flex items-center">
                     <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-2 rounded-lg">
                         <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -43,9 +42,30 @@
                         <p class="text-sm text-gray-600">Teacher Portal</p>
                     </div>
                 </div>
-                <!-- ...rest of teacher dashboard HTML... -->
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Home</a>
+                    <a href="/logout" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">Logout</a>
+                </div>
             </div>
         </div>
     </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">Your Classes</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Math</h3>
+                <p class="text-gray-600">Monday 08:00 - Room 101</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Science</h3>
+                <p class="text-gray-600">Tuesday 10:00 - Room 102</p>
+            </div>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900 mt-12 mb-8">Notifications</h2>
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+            <p class="text-gray-600">No new notifications.</p>
+        </div>
+    </main>
 </body>
 </html>
